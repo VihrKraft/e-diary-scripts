@@ -27,9 +27,7 @@ def fix_marks(schoolkid):
     student = studentExcepts(schoolkid)
     if student:
         bad_marks = Mark.objects.filter(schoolkid=student, points__lte=3)
-        for bad_mark in bad_marks:
-            bad_mark.points=5
-            bad_mark.save()
+        bad_marks.update(points=5)
 
 
 def remove_chastisements(schoolkid):
