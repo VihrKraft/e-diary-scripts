@@ -2,7 +2,7 @@ import random
 from datacenter.models import Schoolkid, Subject, Lesson, Mark, Chastisement, Commendation
 
 
-def studentExcepts(schoolkid):
+def student_excepts(schoolkid):
     try:
         student = Schoolkid.objects.get(full_name__contains=schoolkid)
         return student
@@ -12,7 +12,7 @@ def studentExcepts(schoolkid):
         print('Ученик не найден. Попробуйте повторить запрос, исправив ошибки.')
 
 
-def subjectExcepts(name_subject, student):
+def subject_excepts(name_subject, student):
     try:
         if student:
             subject = Subject.objects.get(title__contains=name_subject, year_of_study=student.year_of_study)  
@@ -24,22 +24,22 @@ def subjectExcepts(name_subject, student):
 
 
 def fix_marks(schoolkid):
-    student = studentExcepts(schoolkid)
+    student = student_excepts(schoolkid)
     if student:
         bad_marks = Mark.objects.filter(schoolkid=student, points__lte=3)
         bad_marks.update(points=5)
 
 
 def remove_chastisements(schoolkid):
-    student = studentExcepts(schoolkid)
+    student = student_excepts(schoolkid)
     if student:
         chastisements = Chastisement.objects.filter(schoolkid=student)
         chastisements.delete()
     
 
 def create_commendation(schoolkid, name_subject):
-    student = studentExcepts(schoolkid)
-    subject = subjectExcepts(name_subject, student)
+    student = student_excepts(schoolkid)
+    subject = subject_excepts(name_subject, student)
     if subject and student:
         lessons = Lesson.objects.filter(year_of_study=student.year_of_study, group_letter=student.group_letter, subject=subject)
         lesson = random.choice(lessons)
