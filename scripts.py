@@ -12,10 +12,10 @@ def get_student(schoolkid):
         print('Ученик не найден. Попробуйте повторить запрос, исправив ошибки.')
 
 
-def get_subject(name_subject, student):
+def get_subject(subject_name, student):
     try:
         if student:
-            subject = Subject.objects.get(title__contains=name_subject, year_of_study=student.year_of_study)  
+            subject = Subject.objects.get(title__contains=subject_name, year_of_study=student.year_of_study)  
             return subject
     except Subject.MultipleObjectsReturned: 
         print('По вашему запросу найдено больше 1 предмета. Введите более точный запрос.')
@@ -37,9 +37,9 @@ def remove_chastisements(schoolkid):
         chastisements.delete()
     
 
-def create_commendation(schoolkid, name_subject):
+def create_commendation(schoolkid, subject_name):
     student = get_student(schoolkid)
-    subject = get_subject(name_subject, student)
+    subject = get_subject(subject_name, student)
     if subject and student:
         lessons = Lesson.objects.filter(year_of_study=student.year_of_study, group_letter=student.group_letter, subject=subject)
         lesson = random.choice(lessons)
